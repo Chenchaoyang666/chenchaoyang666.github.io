@@ -128,7 +128,7 @@ $(function () {
                   dataTitle = dataTitle.replace(regS, '<span class="search-keyword">' + keyword + '</span>')
                 })
 
-                str += '<div class="local-search__hit-item"><a href="' + dataUrl + '" class="search-result-title">' + dataTitle + '</a>'
+                str += '<div class="local-search__hit-item"><a href="' + GLOBAL_CONFIG.root + dataUrl + '" class="search-result-title">' + dataTitle + '</a>'
                 count += 1
                 $('.local-search-stats__hr').show()
 
