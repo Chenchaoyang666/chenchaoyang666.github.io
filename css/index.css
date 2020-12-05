@@ -1944,7 +1944,7 @@ blockquote footer cite:before {
 #aside_content .card-widget {
   overflow: hidden;
   border-radius: 8px;
-  background: #fff;
+  background: rgba(255,255,255,0.7);
   -webkit-box-shadow: 0 4px 8px 6px rgba(7,17,27,0.06);
   box-shadow: 0 4px 8px 6px rgba(7,17,27,0.06);
   -webkit-transition: all 0.3s;
@@ -3146,7 +3146,7 @@ _:future,
   padding: 0;
   height: 280px;
   border-radius: 8px;
-  background: #fff;
+  background: rgba(255,255,255,0.7);
   -webkit-box-shadow: 0 4px 8px 6px rgba(7,17,27,0.06);
   box-shadow: 0 4px 8px 6px rgba(7,17,27,0.06);
   -webkit-transition: all 0.3s;
