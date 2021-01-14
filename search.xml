@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>css盒模型及布局</title>
+      <link href="posts/17705/"/>
+      <url>posts/17705/</url>
+      
+        <content type="html"><![CDATA[<h2 id="普通盒模型"><a href="#普通盒模型" class="headerlink" title="普通盒模型"></a>普通盒模型</h2><p>在 CSS 中盒模型被分为两种，第一种是 W3C 的标准模型，第二种是 IE 怪异盒模型。不同之处在于后者的宽高定义的是可见元素框的尺寸，而不是元素框的内容区尺寸。目前对于浏览器大多数元素都是基于 W3C 标准的盒模型，但对于表单<code>form</code>中的部分元素还是基于 IE 的怪异盒模型，如<code>input</code>里的<code>radio</code>、<code>checkbox</code>、<code>button</code>等元素，如果给其设置<code>border</code>和<code>padding</code>它们也只会往元素盒内延伸<br><img src= "/img/loading.gif" data-src="https://s3.ax1x.com/2021/01/14/sd8uB4.md.png" alt=""><br>在 W3C 的标准模型下，宽度和高度仅仅包含了内容宽度，除去了边框和内边距两个区域，这样为 web 设计师处理效果带来了不少麻烦。为了解决这个问题，CSS3 新增了一个盒模型属性<code>box-sizing</code>，能够事先定义盒模型的尺寸解析方式</p><blockquote><p>box-sizing<br>  值: content-box | bordrer-box | padding-box | inherit<br>  初始值: content-box<br>  应用于: 块级元素和替换元素<br>  继承性: 无</p></blockquote><div class="note info flat">            <p>注意1：只有firefox浏览器支持padding-box属性值</p>          </div><div class="note info flat">            <p>注意2：IE浏览器在getComputedStyle得到width/height是按照标准模式计算的，而不论box-sizing的取值</p>          </div><h2 id="弹性盒模型-flex"><a href="#弹性盒模型-flex" class="headerlink" title="弹性盒模型(flex)"></a>弹性盒模型(flex)</h2><h2 id="布局系统"><a href="#布局系统" class="headerlink" title="布局系统"></a>布局系统</h2><h3 id="css-Media-媒体查询"><a href="#css-Media-媒体查询" class="headerlink" title="css Media 媒体查询"></a>css Media 媒体查询</h3><h3 id="css-多列布局"><a href="#css-多列布局" class="headerlink" title="css 多列布局"></a>css 多列布局</h3><h3 id="grid-栅格布局"><a href="#grid-栅格布局" class="headerlink" title="grid 栅格布局"></a>grid 栅格布局</h3><h3 id="移动优先的响应式布局"><a href="#移动优先的响应式布局" class="headerlink" title="移动优先的响应式布局"></a>移动优先的响应式布局</h3><h2 id="居中布局"><a href="#居中布局" class="headerlink" title="居中布局"></a>居中布局</h2><h2 id="常见布局方式"><a href="#常见布局方式" class="headerlink" title="常见布局方式"></a>常见布局方式</h2><pre><code></code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 前端 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Css </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>css动画(transition)</title>
       <link href="posts/62887/"/>
       <url>posts/62887/</url>
