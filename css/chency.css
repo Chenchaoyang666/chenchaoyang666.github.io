@@ -338,3 +338,21 @@ body a:hover,button,h1,h2,h3,h4,h5,h6,i,#upj,svg,.vat,.vnick {
 #subtitle:before {
     background-color: rgba(0, 0, 0, 0);
 }
+
+/* aplayer 播放器隐藏 */
+/* 
+.aplayer .aplayer-lrc p {
+    font-size:12px;
+    font-weight:700;
+    line-height:16px!important
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current {
+    font-size:15px;
+    color:#49b1f5
+  }
+  .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+    left:-66px!important
+  }
+  .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+    left:0!important
+  } */
