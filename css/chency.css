@@ -247,14 +247,16 @@ a {
 /* 鼠标图标 */
 
 body * {
-    cursor: url(https://cdn.jsdelivr.net/gh/lete114/CDN@1.0/Use/Jkll8I.png), auto !important;
+    cursor: url(https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@latest/Hexo/img/default.cur),auto !important;
+    /* cursor: url(https://cdn.jsdelivr.net/gh/lete114/CDN@1.0/Use/Jkll8I.png), auto !important; */
 }
 
 
 /*a标签*/
 
-body a:hover,button,h1,h2,h3,h4,h5,h6,i,#upj,svg,.vat,.vnick {
-    cursor: url(https://cdn.jsdelivr.net/gh/lete114/CDN@1.0/Use/JkuClT.png), auto !important;
+body a:hover,button,h1,h2,h3,h4,h5,h6,i,#upj,svg,.vat,.vnick,img {
+    cursor: url(https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@latest/Hexo/img/pointer.cur),auto !important;
+    /* cursor: url(https://cdn.jsdelivr.net/gh/lete114/CDN@1.0/Use/JkuClT.png), auto !important; */
 }
 
 /* 滚动条 */
