@@ -4,13 +4,25 @@
   
     
     <entry>
-      <title>new</title>
+      <title>健忘总结篇</title>
       <link href="posts/43786/"/>
       <url>posts/43786/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<p>本篇记录总结一下web实习期间的一些操作流程（私有）</p><h2 id="前端部分："><a href="#前端部分：" class="headerlink" title="前端部分："></a>前端部分：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">首先npm添加依赖：npm install</span><br><span class="line">添加代理文件：proxy-table.js</span><br><span class="line">然后添加子模块：git rm -r --cached xxx</span><br><span class="line">git submodule add url xxx(确保文件中没有xxx文件)</span><br></pre></td></tr></table></figure><h2 id="后端部分：（有些命令保存在secureCRT中，方便操作）"><a href="#后端部分：（有些命令保存在secureCRT中，方便操作）" class="headerlink" title="后端部分：（有些命令保存在secureCRT中，方便操作）"></a>后端部分：（有些命令保存在secureCRT中，方便操作）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">下载对应的交叉编译器的压缩包到目录下</span><br><span class="line">解压缩压缩包</span><br><span class="line">修改环境变量：</span><br><span class="line">1、修改配置：</span><br><span class="line">进入环境变量配置文件sudo vi profile&#x2F;bashrc(全部用户&#x2F;当前用户)</span><br><span class="line">修改环境变量 export PATH&#x3D;&#x2F;home&#x2F;chenzy&#x2F;vp59&#x2F;bin:$PATH</span><br><span class="line">使环境变量生效 source &#x2F;profile</span><br><span class="line">2、直接在编译服务器环境下：</span><br><span class="line">export PATH&#x3D;&#x2F;home&#x2F;chenzhaoy&#x2F;vp59&#x2F;bin:$PATH</span><br><span class="line">或(PATH&#x3D; $PATH:&#x2F;home&#x2F;chenzhaoy&#x2F;vp59&#x2F;bin)</span><br><span class="line">查看环境：echo $PATH</span><br><span class="line"></span><br><span class="line">编译脚本:</span><br><span class="line">cd xxx</span><br><span class="line">rm -rf debug</span><br><span class="line">mkdir debug;cd debug</span><br><span class="line">cmake ..&#x2F; -Dhost&#x3D;t57(机型) -Dver&#x3D;v86(版本) -LH  -DDEBUG_MODE&#x3D;OFF</span><br><span class="line">举例：</span><br><span class="line">(cmake ..&#x2F; -Dhost&#x3D;vp59 -Dver&#x3D;v84 -LH -DENABLE_BACKTRACE&#x3D;ON -DENABLE_STRIP&#x3D;ON -DDEBUG_MODE&#x3D;OFF)</span><br><span class="line">make install -j</span><br><span class="line"></span><br><span class="line">话机登录：</span><br><span class="line">emtoo\n</span><br><span class="line">omped51\n</span><br><span class="line"></span><br><span class="line">SIP挂载（【&#x2F;boot&#x2F;script&#x2F;nfs.sh】话机第一次启动需要）：</span><br><span class="line">mkdir &#x2F;tmp&#x2F;chenzy  &amp;&amp;  busybox mount -t nfs -o nolock,rsize&#x3D;1024,wsize&#x3D;1024 10.175.2.10:&#x2F;home&#x2F;chenzhaoy &#x2F;tmp&#x2F;chenzy</span><br><span class="line"></span><br><span class="line">将编译文件挂载到话机目录下：</span><br><span class="line">mount --bind </span><br><span class="line">&#x2F;tmp&#x2F;xx&#x2F;xx &#x2F;debug(编译时选择的目录)&#x2F;output&#x2F;www&#x2F;WEB-INFO &#x2F;phone&#x2F;www&#x2F;WEB-INFO</span><br><span class="line"></span><br><span class="line">页面重启：</span><br><span class="line">&#x2F;phone&#x2F;scripts&#x2F;reset-httpd.sh</span><br><span class="line"></span><br><span class="line">日志查询：</span><br><span class="line">cat tmp&#x2F;log&#x2F;xxx.log | grep WEB(过滤只剩web模块)</span><br></pre></td></tr></table></figure><h2 id="剩余部分直接参考文件"><a href="#剩余部分直接参考文件" class="headerlink" title="剩余部分直接参考文件"></a>剩余部分直接参考文件</h2><p><a href="">web总结</a></p>]]></content>
       
       
+      <categories>
+          
+          <category> 其他 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 总结 </tag>
+            
+        </tags>
       
     </entry>
     
