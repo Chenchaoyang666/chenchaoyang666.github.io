@@ -4,11 +4,38 @@
   
     
     <entry>
+      <title>Vue 特性集合</title>
+      <link href="posts/56620/"/>
+      <url>posts/56620/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Vue-render"><a href="#Vue-render" class="headerlink" title="Vue render"></a>Vue render</h2><ul><li><a href="https://www.jianshu.com/p/0c9516a3be80" target="_blank" rel="noopener">点我了解render用法</a></li></ul><h2 id="Vue异步更新Dom和-nextTick原理"><a href="#Vue异步更新Dom和-nextTick原理" class="headerlink" title="Vue异步更新Dom和$nextTick原理"></a>Vue异步更新Dom和$nextTick原理</h2><p>理论上，我们不应主动去操作DOM，因为Vue的核心思想就是数据驱动DOM，但在很多业务里，我们避免不了会操做一些DOM,这时我们就有可能用到$nextTick。</p><h3 id="nextTick"><a href="#nextTick" class="headerlink" title="$nextTick"></a>$nextTick</h3><ul><li><a href="https://www.cnblogs.com/pleaseAnswer/p/13566987.html" target="_blank" rel="noopener">Vue异步更新Dom</a></li><li>$nextTick 的使用场景<br>虽然 Vue 是数据驱动的，但是有时候我们不得不去操作 DOM 去处理一些特殊的场景，而 Vue 更新 DOM 是异步执行的，所以我们不得不去使用 $nextTick 去异步获取 DOM。<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;span ref=<span class="string">"msg"</span>&gt;&#123;&#123; msg &#125;&#125;&lt;<span class="regexp">/span&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>div&gt;</span><br><span class="line">&lt;<span class="regexp">/template&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp">export default &#123;</span></span><br><span class="line"><span class="regexp">  data() &#123;</span></span><br><span class="line"><span class="regexp">    return &#123;</span></span><br><span class="line"><span class="regexp">      msg: 'hello nextTick'</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">  &#125;,</span></span><br><span class="line"><span class="regexp">  methods: &#123;</span></span><br><span class="line"><span class="regexp">    changeMsg() &#123;</span></span><br><span class="line"><span class="regexp">      this.msg = 'hello world'</span></span><br><span class="line"><span class="regexp">      console.log(this.$refs.msg.innerHTML, '同步获取')</span></span><br><span class="line"><span class="regexp">      this.$nextTick(() =&gt; &#123;</span></span><br><span class="line"><span class="regexp">        console.log(this.$refs.msg.innerHTML, '异步获取')</span></span><br><span class="line"><span class="regexp">      &#125;)</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">  &#125;,</span></span><br><span class="line"><span class="regexp">  mounted() &#123;</span></span><br><span class="line"><span class="regexp">    this.changeMsg()</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">&lt;/</span>script&gt;</span><br></pre></td></tr></table></figure>得到的结果分别是：<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hello nextTick 同步获取</span><br><span class="line">hello world 异步获取</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 前端 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> JavaScrip </tag>
+            
+            <tag> Vue </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>git的常用工具推荐</title>
       <link href="posts/31626/"/>
       <url>posts/31626/</url>
       
-        <content type="html"><![CDATA[<h2 id="Tortoigit"><a href="#Tortoigit" class="headerlink" title="Tortoigit"></a>Tortoigit</h2><h3 id="安装与使用教程一大堆，这里只说一下将对比工具改成BeyondCompare"><a href="#安装与使用教程一大堆，这里只说一下将对比工具改成BeyondCompare" class="headerlink" title="安装与使用教程一大堆，这里只说一下将对比工具改成BeyondCompare"></a>安装与使用教程一大堆，这里只说一下将对比工具改成BeyondCompare</h3><ul><li><a href="https://www.cnblogs.com/anayigeren/p/10177027.html" target="_blank" rel="noopener">TortoiseGit 使用教程</a></li><li>在设置中找到差异查看器-&gt;外部-&gt;选择下载好的比较工具文件</li></ul><p>本人认为自带的比较不好用，所以使用外部的比较工具，按需引入</p><ul><li><a href="https://www.beyondcompare.cc/" target="_blank" rel="noopener">beyondcompare安装</a></li></ul><h2 id="GitKraken"><a href="#GitKraken" class="headerlink" title="GitKraken"></a>GitKraken</h2><p>正在使用中，一种是下载6.5.1版本之前的免费版，阻止更新、破解。</p><ul><li><a href="https://blog.csdn.net/weixin_43335226/article/details/107091568" target="_blank" rel="noopener">GitKraken的安装与破解</a></li></ul><p>还有一种直接下载这个版本的GitKraken，顺便附上了破解方法</p><ul><li><a href="https://pan.baidu.com/s/1B-Fvg4xsTR0V63IIx1hhOg" target="_blank" rel="noopener">GitKraken安装文件</a>提取码: 5p2p</li><li><a href="https://github.com/5cr1pt/GitCracken" target="_blank" rel="noopener">破解方法</a></li></ul><h2 id="git配置时注意"><a href="#git配置时注意" class="headerlink" title="git配置时注意"></a>git配置时注意</h2><ul><li><p>git配置用户名邮箱和ssh后，需要再加入配置<code>git config --global  core.autocrlf=false</code>,避免因为符号格式导致代码在不同环境编译失败的问题</p></li><li><p>如果电脑上有两个环境需要在两种环境下都进行git基础配置以及同时在远程仓库提交两份生成的ssh公钥<code>ssh-keygen -t rsa</code></p></li></ul>]]></content>
+        <content type="html"><![CDATA[<h2 id="Tortoigit"><a href="#Tortoigit" class="headerlink" title="Tortoigit"></a>Tortoigit</h2><h3 id="安装与使用教程一大堆，这里只说一下将对比工具改成BeyondCompare"><a href="#安装与使用教程一大堆，这里只说一下将对比工具改成BeyondCompare" class="headerlink" title="安装与使用教程一大堆，这里只说一下将对比工具改成BeyondCompare"></a>安装与使用教程一大堆，这里只说一下将对比工具改成BeyondCompare</h3><ul><li><a href="https://www.cnblogs.com/anayigeren/p/10177027.html" target="_blank" rel="noopener">TortoiseGit 使用教程</a></li><li>在设置中找到差异查看器-&gt;外部-&gt;选择下载好的比较工具文件</li></ul><p>本人认为自带的比较不好用，所以使用外部的比较工具，按需引入</p><ul><li><a href="https://www.beyondcompare.cc/" target="_blank" rel="noopener">beyondcompare安装</a></li></ul><h2 id="GitKraken"><a href="#GitKraken" class="headerlink" title="GitKraken"></a>GitKraken</h2><p>直接下载这个版本的GitKraken，顺便附上了破解方法</p><ul><li><a href="https://pan.baidu.com/s/1B-Fvg4xsTR0V63IIx1hhOg" target="_blank" rel="noopener">GitKraken安装文件</a>提取码: 5p2p</li><li><a href="https://github.com/5cr1pt/GitCracken" target="_blank" rel="noopener">破解方法</a></li><li><a href="https://www.cnblogs.com/brifuture/category/1219605.html" target="_blank" rel="noopener">GitKraken快速上手使用教程</a></li></ul><h2 id="git配置时注意"><a href="#git配置时注意" class="headerlink" title="git配置时注意"></a>git配置时注意</h2><ul><li><p>git配置用户名邮箱和ssh后，需要再加入配置<code>git config --global  core.autocrlf=false</code>,避免因为符号格式导致代码在不同环境编译失败的问题</p></li><li><p>如果电脑上有两个环境需要在两种环境下都进行git基础配置以及同时在远程仓库提交两份生成的ssh公钥<code>ssh-keygen -t rsa</code></p></li></ul>]]></content>
       
       
       <categories>
