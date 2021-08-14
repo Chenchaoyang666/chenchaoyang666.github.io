@@ -1,0 +1,225 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JS运行机制 | CCY's Blog</title><meta name="description" content="概念1： JS是单线程执行”JS是单线程的”指的是JS 引擎线程。  在浏览器环境中，有JS 引擎线程和渲染线程，且两个线程互斥。Node环境中，只有JS 线程。  概念2：宿主JS运行的环境。一般为浏览器或者Node。 概念3：Event Loop  JS引擎常驻于内存中，等待宿主将JS代码或函数传递给它。也就是等待宿主环境分配宏观任务，反复等待 - 执行即为事件循环。  Event Loop中"><meta name="keywords" content="JavaScrip"><meta name="author" content="Chen cy"><meta name="copyright" content="Chen cy"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/other/4.jpg"><link rel="canonical" href="https://www.chency1115.cn/posts/43184/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="preconnect" href="//zz.bdstatic.com"/><meta property="og:type" content="article"><meta property="og:title" content="JS运行机制"><meta property="og:url" content="https://www.chency1115.cn/posts/43184/"><meta property="og:site_name" content="CCY's Blog"><meta property="og:description" content="概念1： JS是单线程执行”JS是单线程的”指的是JS 引擎线程。  在浏览器环境中，有JS 引擎线程和渲染线程，且两个线程互斥。Node环境中，只有JS 线程。  概念2：宿主JS运行的环境。一般为浏览器或者Node。 概念3：Event Loop  JS引擎常驻于内存中，等待宿主将JS代码或函数传递给它。也就是等待宿主环境分配宏观任务，反复等待 - 执行即为事件循环。  Event Loop中"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/wallpaper/cover_8.jpg"><meta property="article:published_time" content="2021-08-14T04:19:30.864Z"><meta property="article:modified_time" content="2021-08-14T05:01:26.729Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><link rel="next" title="crash问题分析" href="https://www.chency1115.cn/posts/40520/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: false,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: true,
+  fancybox: true,
+  Snackbar: {"bookmark":{"message_prev":"按","message_next":"键将本页加入书签"},"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: true,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false    
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2021-08-14 13:01:26'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><link rel="stylesheet" href="/css/chency.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@master/Hexo/css/flink.min.css"></head><body><canvas class="fireworks"></canvas><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/other/4.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">27</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">15</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fas fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down menus-expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page"><i class="fa-fw fas fa-list"></i><span> 媒体</span><i class="fas fa-chevron-down menus-expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fab fa-youtube"></i><span> 番剧</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></li><li><a class="site-page" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书单</span></a></li><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down menus-expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/gallery/"><i class="fa-fw far fa-image"></i><span> 相册</span></a></li><li><a class="site-page" href="/home/"><i class="fa-fw fab fa-phoenix-framework"></i><span> 主页</span></a></li><li><a class="site-page" href="/box/"><i class="fa-fw fab fa-xbox"></i><span> 聚宝盒</span></a></li><li><a class="site-page" href="/talk/"><i class="fa-fw far fa-comment"></i><span> 微语</span></a></li><li><a class="site-page" href="/contact/"><i class="fa-fw far fa-comments"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 小伙伴</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div></div></div></div><i class="fas fa-arrow-right" id="toggle-sidebar"></i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概念1：-JS是单线程执行"><span class="toc-number">1.</span> <span class="toc-text">概念1： JS是单线程执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概念2：宿主"><span class="toc-number">2.</span> <span class="toc-text">概念2：宿主</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概念3：Event-Loop"><span class="toc-number">3.</span> <span class="toc-text">概念3：Event Loop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概念4：宏任务和微任务"><span class="toc-number">4.</span> <span class="toc-text">概念4：宏任务和微任务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#拓展"><span class="toc-number">5.</span> <span class="toc-text">拓展</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#setTimeout，setImmediate谁先执行？"><span class="toc-number">5.1.</span> <span class="toc-text">setTimeout，setImmediate谁先执行？</span></a></li></ol></li></ol></div></div></div><div id="body-wrap"><div id="web_bg" data-type="photo"></div><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/wallpaper/cover_8.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">CCY's Blog</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fas fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down menus-expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page"><i class="fa-fw fas fa-list"></i><span> 媒体</span><i class="fas fa-chevron-down menus-expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fab fa-youtube"></i><span> 番剧</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></li><li><a class="site-page" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书单</span></a></li><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down menus-expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/gallery/"><i class="fa-fw far fa-image"></i><span> 相册</span></a></li><li><a class="site-page" href="/home/"><i class="fa-fw fab fa-phoenix-framework"></i><span> 主页</span></a></li><li><a class="site-page" href="/box/"><i class="fa-fw fab fa-xbox"></i><span> 聚宝盒</span></a></li><li><a class="site-page" href="/talk/"><i class="fa-fw far fa-comment"></i><span> 微语</span></a></li><li><a class="site-page" href="/contact/"><i class="fa-fw far fa-comments"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 小伙伴</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">JS运行机制</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2021-08-14 12:19:30"><i class="far fa-calendar-alt fa-fw"></i> 发表于 2021-08-14</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2021-08-14 13:01:26"><i class="fas fa-history fa-fw"></i> 更新于 2021-08-14</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fas fa-inbox fa-fw post-meta__icon"></i><a class="post-meta__categories" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a></span></div><div class="meta-secondline"> <span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta__icon"></i><span>字数总计:</span><span class="word-count">1.2k</span><span class="post-meta__separator">|</span><i class="far fa-clock fa-fw post-meta__icon"></i><span>阅读时长: 4 分钟</span></span></div><div class="meta-thirdline"><span class="post-meta-pv-cv"><span class="post-meta__separator">|</span><i class="far fa-eye fa-fw post-meta__icon"></i><span>阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="概念1：-JS是单线程执行"><a href="#概念1：-JS是单线程执行" class="headerlink" title="概念1： JS是单线程执行"></a>概念1： JS是单线程执行</h2><p>”JS是单线程的”指的是JS 引擎线程。</p>
+<blockquote>
+<p>在浏览器环境中，有JS 引擎线程和渲染线程，且两个线程互斥。<br>Node环境中，只有JS 线程。</p>
+</blockquote>
+<h2 id="概念2：宿主"><a href="#概念2：宿主" class="headerlink" title="概念2：宿主"></a>概念2：宿主</h2><p>JS运行的环境。一般为浏览器或者Node。</p>
+<h2 id="概念3：Event-Loop"><a href="#概念3：Event-Loop" class="headerlink" title="概念3：Event Loop"></a>概念3：Event Loop</h2><p><img src= "/img/loading.gif" data-src="https://upload-images.jianshu.io/upload_images/25750-50b8dfd7f560fe04?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt=""></p>
+<blockquote>
+<p>JS引擎常驻于内存中，等待宿主将JS代码或函数传递给它。<br>也就是等待宿主环境分配宏观任务，反复等待 - 执行即为事件循环。</p>
+</blockquote>
+<p>Event Loop中，每一次循环称为tick，每一次tick的任务如下：</p>
+<ul>
+<li>执行栈选择最先进入队列的宏任务（一般都是script），执行其同步代码直至结束；</li>
+<li>检查是否存在微任务，有则会执行至微任务队列为空；</li>
+<li>如果宿主为浏览器，可能会渲染页面；</li>
+<li>开始下一轮tick，执行宏任务中的异步代码（setTimeout等回调）。</li>
+</ul>
+<h2 id="概念4：宏任务和微任务"><a href="#概念4：宏任务和微任务" class="headerlink" title="概念4：宏任务和微任务"></a>概念4：宏任务和微任务</h2><blockquote>
+<p>ES6 规范中，microtask 称为 jobs，macrotask 称为 task<br>宏任务是由宿主发起的，而微任务由JavaScript自身发起。</p>
+</blockquote>
+<p>在ES3以及以前的版本中，JavaScript本身没有发起异步请求的能力，也就没有微任务的存在。在ES5之后，JavaScript引入了Promise，这样，不需要浏览器，JavaScript引擎自身也能够发起异步任务了。</p>
+<p>所以，总结一下，两者区别为：<br><img src= "/img/loading.gif" data-src="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/post/task.png" alt=""></p>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><h3 id="setTimeout，setImmediate谁先执行？"><a href="#setTimeout，setImmediate谁先执行？" class="headerlink" title="setTimeout，setImmediate谁先执行？"></a>setTimeout，setImmediate谁先执行？</h3><p>setImmediate和process.nextTick为Node环境下常用的方法（IE11支持setImmediate），所以，后续的分析都基于Node宿主。</p>
+<p>Node.js是运行在服务端的js，虽然用到也是V8引擎，但由于服务目的和环境不同，导致了它的API与原生JS有些区别，其Event Loop还要处理一些I/O，比如新的网络连接等，所以与浏览器Event Loop不太一样。</p>
+<p>执行顺序如下：</p>
+<blockquote>
+<p>timers: 执行setTimeout和setInterval的回调<br>pending callbacks: 执行延迟到下一个循环迭代的 I/O 回调<br>idle, prepare: 仅系统内部使用<br>poll: 检索新的 I/O 事件;执行与 I/O 相关的回调。事实上除了其他几个阶段处理的事情，其他几乎所有的异步都在这个阶段处理。<br>check: setImmediate在这里执行<br>close callbacks: 一些关闭的回调函数，如：socket.on(‘close’, …)<br>一般来说，setImmediate会在setTimeout之前执行，如下：</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'outer'</span>);</span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'setTimeout'</span>);</span><br><span class="line">  &#125;, <span class="number">0</span>);</span><br><span class="line">  setImmediate(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'setImmediate'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>其执行顺序为：</p>
+<ul>
+<li>外层是一个setTimeout，所以执行它的回调的时候已经在timers阶段了</li>
+<li>处理里面的setTimeout，因为本次循环的timers正在执行，所以其回调其实加到了下个timers阶段</li>
+<li>处理里面的setImmediate，将它的回调加入check阶段的队列</li>
+<li>外层timers阶段执行完，进入pending callbacks，idle, prepare，poll，这几个队列都是空的，所以继续往下</li>
+<li>到了check阶段，发现了setImmediate的回调，拿出来执行</li>
+<li>然后是close callbacks，队列是空的，跳过</li>
+<li>又是timers阶段，执行console.log(‘setTimeout’)<br>但是，如果当前执行环境不是timers阶段，就不一定了。。。。顺便科普一下Node里面对setTimeout的特殊处理：setTimeout(fn, 0)会被强制改为setTimeout(fn, 1)。</li>
+</ul>
+<p>看看下面的例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'setTimeout'</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">setImmediate(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'setImmediate'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>其执行顺序为：</p>
+<ul>
+<li>遇到setTimeout，虽然设置的是0毫秒触发，但是被node.js强制改为1毫秒，塞入times阶段</li>
+<li>遇到setImmediate塞入check阶段</li>
+<li>同步代码执行完毕，进入Event Loop</li>
+<li>先进入times阶段，检查当前时间过去了1毫秒没有，如果过了1毫秒，满足setTimeout条件，执行回调，如果没过1毫秒，跳过</li>
+<li>跳过空的阶段，进入check阶段，执行setImmediate回调<br>可见，1毫秒是个关键点，所以在上面的例子中，setImmediate不一定在setTimeout之前执行了。</li>
+</ul>
+<div class="note info flat">
+            <p>因为process.nextTick为Node环境下的方法，所以后续的分析依旧基于Node。<br>process.nextTick() 是一个特殊的异步API，其不属于任何的Event Loop阶段。事实上Node在遇到这个API时，Event Loop根本就不会继续进行，会马上停下来执行process.nextTick()，这个执行完后才会继续Event Loop。<br>所以，nextTick和Promise同时出现时，肯定是nextTick先执行，原因是nextTick的队列比Promise队列优先级更高。</p>
+          </div>
+
+<div class="note info flat">
+            <p>promise的内部既包含宏任务也包含微任务，promise内部执行为宏任务，then执行为微任务</p>
+          </div>
+
+<div class="note info flat">
+            <p>第一轮宏任务打印：script start 、async2 end、 Promise 、script end<br>第一轮微任务打印：async1 end 、promise1、promise2<br>（此时微任务队列清空，且存在其他宏任务，进入下一轮事件循环）<br>第二轮宏任务： setTimeout等</p>
+          </div>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen cy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chency1115.cn/posts/43184/">https://www.chency1115.cn/posts/43184/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chency1115.cn" target="_blank">CCY's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JavaScrip/">JavaScrip</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/wallpaper/cover_8.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><button class="reward-button" type="button"><i class="fas fa-qrcode"></i> 打赏<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="post-qr-code__img" src="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/other/1.png" alt="wechat" onclick="window.open('https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/other/1.png')"/><div class="post-qr-code__desc">wechat</div></li><li class="reward-item"><img class="post-qr-code__img" src="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/other/3.jpg" alt="alipay" onclick="window.open('https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/other/3.jpg')"/><div class="post-qr-code__desc">alipay</div></li></ul></div></button></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/40520/"><img class="next-cover" data-src="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/wallpaper/cover_7.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">crash问题分析</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/posts/43529/" title="JavaScript中的全局对象"><img class="relatedPosts_cover" data-src="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/post/15.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-11-04</div><div class="relatedPosts_title">JavaScript中的全局对象</div></div></a></div><div class="relatedPosts_item"><a href="/posts/55046/" title="动态规划"><img class="relatedPosts_cover" data-src="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/post/18.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-12-13</div><div class="relatedPosts_title">动态规划</div></div></a></div><div class="relatedPosts_item"><a href="/posts/56620/" title="Vue 特性集合"><img class="relatedPosts_cover" data-src="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/wallpaper/cover_1.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-17</div><div class="relatedPosts_title">Vue 特性集合</div></div></a></div><div class="relatedPosts_item"><a href="/posts/26266/" title="async和await使用对比"><img class="relatedPosts_cover" data-src="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/wallpaper/cover_4.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-19</div><div class="relatedPosts_title">async和await使用对比</div></div></a></div><div class="relatedPosts_item"><a href="/posts/60033/" title="回溯算法"><img class="relatedPosts_cover" data-src="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/post/19.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-12-13</div><div class="relatedPosts_title">回溯算法</div></div></a></div><div class="relatedPosts_item"><a href="/posts/53275/" title="算法技巧"><img class="relatedPosts_cover" data-src="https://cdn.jsdelivr.net/gh/Chenchaoyang666/CDN/post/17.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-12-13</div><div class="relatedPosts_title">算法技巧</div></div></a></div></div></div><hr><div id="post-comment"><div class="comment-head"><div class="comment-headling"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div class="comment-switch"><span class="first-comment">Valine</span><label><input id="switch-comments-btn" type="checkbox"><span class="slider"></span></label><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div class="comments-items-1" data-name="Valine"><div class="vcomment" id="vcomment"></div><script>function loadvaline () {  
+  var requestSetting = function (from,set) {
+    var from = from
+    var setting = set.split(',').filter(function(item){
+    return from.indexOf(item) > -1
+    });
+    setting = setting.length == 0 ? from :setting;
+    return setting
+  }
+
+  var guestInfo = requestSetting(['nick','mail','link'],'nick,mail,link')
+  var requiredFields = requestSetting(['nick','mail'],'nick,mail')
+
+  function initValine () {
+    window.valine = new Valine({
+      el:'#vcomment',
+      appId: 'lJQjsDGUspQiaqItppf8nrvU-gzGzoHsz',
+      appKey: '50hippIeimuu0vqHczrFDF5j',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: guestInfo,
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      requiredFields: requiredFields
+    });
+  }
+  loadScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || false) {
+  window.addEventListener('load', loadvaline)
+}
+else {
+  function loadOtherComment () {
+    loadvaline()
+  }
+}</script></div><div class="comments-items-2" data-name="Disqus"><div id="disqus_thread"></div><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://www.chency1115.cn/posts/43184/';
+    this.page.identifier = 'posts/43184/';
+    this.page.title = 'JS运行机制';
+  };
+
+  var d = document, s = d.createElement('script');
+  s.src = 'https://.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+}
+
+if ('Valine' === 'Disqus' || false) {
+  window.addEventListener('load', loadDisqus)
+}
+else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2021  <i id="heartbeat" class="fa fas fa-heartbeat"></i> Chen cy</div><div class="framework-info"><span>驱动 </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div><div class="footer_custom_text">我相信我可以，但我一直在路上，所以我有无限的可能！！</div></div><head><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"><meta name="generator" content="Hexo 4.2.0"></head></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div class="search-mask"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="/js/third-party/fireworks.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/third-party/activate-power-mode.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/local-search.js"></script><script src="/js/calendar.js"></script><script src="/js/languages.js"></script><script data-pjax src="/js/chency.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"left","width":120,"height":260},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
