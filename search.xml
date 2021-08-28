@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>调用小米接口修改步数</title>
+      <link href="posts/52583/"/>
+      <url>posts/52583/</url>
+      
+        <content type="html"><![CDATA[<h2 id="修改步数前置条件"><a href="#修改步数前置条件" class="headerlink" title="修改步数前置条件"></a>修改步数前置条件</h2><ul><li>1.应用商店下载<em>小米运动App</em>，手机号注册登录<blockquote><p>注意一定要用手机号，别直接第三方登录</p></blockquote></li><li>2.点击<em>我的-&gt;第三方接入</em>，绑定你想同步数据的项目<blockquote><p>注意同步微信步数需关注公众号：华米科技</p></blockquote></li><li>3.打开网页或者本地运行的脚本，输入<em>小米运动账号</em>、密码和修改的步数<blockquote><p>账号是小米运动的账号，不是小米账号！！！</p></blockquote><h2 id="修改步数网页版"><a href="#修改步数网页版" class="headerlink" title="修改步数网页版"></a>修改步数网页版</h2>这个使用别人的服务器，修改有时间段限制<br><a href="https://4og.cn/xm/" target="_blank" rel="noopener">小米运动步数网页版</a><h2 id="修改步数源码-需搭建Pyhton环境"><a href="#修改步数源码-需搭建Pyhton环境" class="headerlink" title="修改步数源码(需搭建Pyhton环境)"></a>修改步数源码(需搭建Pyhton环境)</h2>github项目地址：<a href="https://github.com/Chenchaoyang666/updateStep" target="_blank" rel="noopener">步数修改源码</a><br>gitee项目地址：<a href="https://gitee.com/chenchaoyang666/updateStep" target="_blank" rel="noopener">步数修改源码</a><br>本地环境运行时要下载包和修改账号密码<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#pip install requests,time,re,json,random</span></span><br><span class="line"><span class="keyword">import</span> requests,time,re,json,random</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改为小米运动账号</span></span><br><span class="line">user = <span class="string">"写你的手机号"</span></span><br><span class="line"><span class="comment"># 修改为小米运动登录密码</span></span><br><span class="line">passwd = <span class="string">"写你的密码"</span></span><br><span class="line"><span class="comment"># 要修改的步数，直接输入想要修改的步数值，留空为随机步数</span></span><br><span class="line">step =<span class="string">"0"</span></span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 后端 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>JS运行机制</title>
       <link href="posts/43184/"/>
       <url>posts/43184/</url>
