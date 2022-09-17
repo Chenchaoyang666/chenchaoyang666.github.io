@@ -1,0 +1,7 @@
+*localhost：8080访问不了:	可能是webpack中https参数限制
+*在添加c++接口时，编译不通过：	头文件未声明成员变量，接口页面需要添加的地方ctrl+d查询添加
+*子模块添加：	git rm -r --cached xxx（再去文件中查看，存在xxx删除） git submodule add url xxx
+*localhost公用domain问题：	在本地用访问过其他的页面后，cookie中存在的值会保留，再用本地访问新页面后会使用之前的secure值，导致安全性鉴定不通过。
+*话机某些机型页面强制刷新：http链接不安全，将代理文件中目标路径改为https链接
+*淘宝换源：	npm install -g cnpm --registry=https://registry.npm.taobao.org	验证：npm config get registry
+*vscode无法执行cnpm之类命令：	set-ExecutionPolicy RemoteSigned（更换执行策略）
